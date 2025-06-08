@@ -1,0 +1,85 @@
+// ############## AUTH JS ##################
+
+model Account { //NEXTAUTH ONLY
+  id                  String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId              String  @map("user_id") @db.ObjectId
+  type                String
+  provider            String
+  providerAccountId   String  @map("provider_account_id")
+  refresh_token       String?
+  access_token        String?
+  expires_at          Int?
+  expires_in          Int?
+  token_type          String?
+  scope               String?
+  id_token            String?
+  session_state       String?
+  api_domain          String?
+  
+  userType            String? @map("user_type") //GHL
+  companyId           String? @map("company_id") //GHL
+  locationId          String? @map("location_id") //GHL
+
+  user                User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken  String    @map("session_token") @unique 
+  userId        String    @map("user_id") @db.ObjectId
+  expires       DateTime
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  @@map("sessions")
+}
+
+model User {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  name              String?
+  email             String?   @unique
+  phone             String?
+  emailVerified     DateTime? @map("email_verified")
+  image             String?
+
+  permissions       Json? //GHL
+  roles             Json? //GHL
+  membershipContactId String? @map("membership_contact_id") //GHL
+  freshdeskContactId  Int? @map("freshdesk_contact_id") //GHL
+  traceId           String? @map("trace_id") //GHL
+
+  settings          DeviceSettings?
+
+  accounts          Account[]
+
+  // projects          Project[] @relation(fields: [project_ids], references: [id])
+  // project_ids       String[]  @db.ObjectId
+
+  devices           Device[]
+  
+  sessions          Session[]
+  invites_sent      Invite[]  @relation(name: "invites_sent")
+  invite_used       Invite?   @relation(name: "invite_used")
+  
+  created_at        DateTime    @default(now())
+  updated_at        DateTime    @updatedAt
+  @@map("users")
+}
+
+model VerificationToken {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  identifier    String
+  token         String   @unique
+  expires       DateTime
+
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}

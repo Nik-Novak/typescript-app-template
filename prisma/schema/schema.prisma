@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TODO implement prismix: https://github.com/jamiepine/prismix
+
+
+//awesome post for features: https://github.com/prisma/prisma/issues/7161#issuecomment-1026317110
+//custom computed fields: https://www.prisma.io/docs/orm/prisma-client/queries/computed-fields
+//custom validation: https://www.prisma.io/docs/concepts/components/prisma-client/custom-validation
+//custom models: .findManyByDomain() : https://www.prisma.io/docs/concepts/components/prisma-client/custom-validation

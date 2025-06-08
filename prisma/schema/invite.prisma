@@ -1,0 +1,25 @@
+enum InviteStatus {
+  sent
+  opened
+  complete
+}
+model Invite {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+
+  email       String
+  status      InviteStatus
+
+  // project     Project?  @relation(fields: [project_id], references: [id])
+  project_id  String    @db.ObjectId
+
+  inviter         User      @relation( name: "invites_sent", fields: [inviter_id], references: [id])
+  inviter_id      String    @db.ObjectId
+
+  user            User?     @relation(name:"invite_used", fields: [user_id], references: [id])
+  user_id         String?    @db.ObjectId @unique
+
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  @@unique([project_id, email])
+  @@map("invites")
+}
