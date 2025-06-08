@@ -1,0 +1,31 @@
+
+type DeviceSettings {
+  dark_mode                 Boolean @default(false)
+  exclude_solar             Boolean @default(true)
+  selected_project_id       String?
+  credits                   Int     @default(200) //temp
+  credit_limit              Int     @default(200) //temp
+  accepted_terms_of_service DateTime?
+  accepted_privacy_policy   DateTime?
+  opened_terms_of_service   DateTime?
+  opened_privacy_policy     DateTime?
+  has_left_feedback         Boolean @default(false)
+  has_completed_tutorial    Boolean @default(false)
+}
+model Device {
+  id                    String              @id @default(auto()) @map("_id") @db.ObjectId
+  uuid                  String              @unique
+
+  settings              DeviceSettings
+
+  user                  User?              @relation(fields: [user_id], references: [id])
+  user_id               String?            @db.ObjectId
+  
+  bugs                  Bug[]
+  contact_requests      ContactRequest[]
+  // scrapes               Scrape[]
+  
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  @@map("devices")
+}

@@ -1,0 +1,16 @@
+model ContactRequest {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+
+  name        String
+  phone       String
+  email       String
+
+  device        Device?      @relation(fields: [device_id], references: [id])
+  device_id     String?    @db.ObjectId
+  // project     Project?    @relation(fields: [project_id], references: [id])
+  project_id  String?     @db.ObjectId
+
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  @@map("contactrequests")
+}
